@@ -1,8 +1,8 @@
-# Twitter OAuth
+# Twitter OAuth sign in
 
 ## Introduction ##
 
-This project reinvents oauth authentication for twitter. This can help me to understand OAuth 1.0a authentication flow.
+This project implements oauth authentication for twitter from scatch. This can help me to understand OAuth 1.0a authentication flow.
 
 ## Usage ##
 
