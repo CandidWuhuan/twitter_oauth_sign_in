@@ -1,4 +1,4 @@
-var CryptoJS = require('crypto-js');
+var crypto = require('crypto');
 
 module.exports = {
 	percentEncode: percentEncode,
@@ -38,8 +38,7 @@ function generateNonce(size) {
 
  function generateSignature(signMethod, reqMethod, url, params, consumerSecret, oauthTokenSecret) {
  	if ('HMAC-SHA1' !== signMethod && 'PLAINTEXT' !== signMethod ) {
- 		// TODO: throw exception
- 		return null;
+ 		throw 'Invalid signature method type [TYPE:' + signMethod + ']';
  	}
 
 	var tokenSecret = oauthTokenSecret || '';
@@ -52,14 +51,17 @@ function generateNonce(size) {
 	var paramString = generateParameterString(params);
 	var signatureBase = generateSignatureBase(reqMethod, url, paramString);
 
-	var hash = null;
+	var signature = null;
 	switch (signMethod) {
 		case 'HMAC-SHA1':
-			hash = CryptoJS.HmacSHA1(signatureBase, signingKey);
+			(function() {
+				var hmac = crypto.createHmac('sha1', signingKey);
+				hmac.update(signatureBase);
+				signature = hmac.digest('base64');
+			})();
 			break;
 	}
 
-	var signature = CryptoJS.enc.Base64.stringify(hash);
 	return signature;
 }
 
